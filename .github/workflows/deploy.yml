@@ -1,4 +1,4 @@
-name: Deploy NodeJS Application to Hostinger
+name: Deploy NodeJS Application
 
 on:
   push:
@@ -10,17 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Deploy Via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: root
+          username: ubuntu
           key: ${{ secrets.SSH_KEY }}
 
           script: |
             cd /home/ubuntu/ci-cd-pipline-githup-action
-            git pull
-            docker compose up -d --build
+
+            git pull origin main
+
+            sudo docker compose down
+            sudo docker compose up -d --build
